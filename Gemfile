@@ -12,6 +12,7 @@ gem 'jbuilder',                '2.7.0'
 gem 'haml',                    '5.0.0'
 gem 'haml-rails',              '1.0.0'
 gem 'simple_form',             '3.5.0'
+gem 'bcrypt',                  '3.1.11'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
