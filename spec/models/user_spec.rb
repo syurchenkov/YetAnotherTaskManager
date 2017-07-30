@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   before(:example) do
-    @user = User.new(email: 'email@example.com', password_digest: '')
+    @user = User.new(email: 'email@example.com', password: 'foobar', password_confirmation: 'foobar')
   end
 
   it "is valid" do 
@@ -49,5 +49,15 @@ RSpec.describe User, type: :model do
     @user.email = mixed_case_email
     @user.save
     expect(@user.reload.email).to be == mixed_case_email.downcase
+  end
+
+  it "is not valid when password is blank" do
+    @user.password = @user.password_confirmation = " " * 6
+    expect(@user).not_to be_valid
+  end
+
+  it "it not valid when password shorter than minimum length" do
+    @user.password = @user.password_confirmation = "a" * 5
+    expect(@user).not_to be_valid
   end
 end
