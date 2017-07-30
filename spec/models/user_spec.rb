@@ -39,7 +39,15 @@ RSpec.describe User, type: :model do
 
   it "is not valid when email is not unique" do
     duplicate_user = @user.dup
+    duplicate_user.email = @user.email.upcase
     @user.save
     expect(duplicate_user).not_to be_valid
+  end
+
+  it "save email in lower-case" do
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email
+    @user.save
+    expect(@user.reload.email).to be == mixed_case_email.downcase
   end
 end
