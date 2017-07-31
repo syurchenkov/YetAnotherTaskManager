@@ -29,6 +29,7 @@ RSpec.describe "UsersSignup", type: :request do
       expect{ post users_path, params: valid_information }.to change { User.count }.by(1)
       follow_redirect!
       render_template('users/show')
+      expect(is_logged_in?).to be true
     end
   end
 end

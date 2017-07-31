@@ -19,6 +19,8 @@ group :development, :test do
   gem 'byebug',  '9.0.6', platform: :mri
   gem "erb2haml" 
   gem 'rspec-rails', '~> 3.5'
+  gem 'factory_girl_rails', '4.8.0'
+  gem 'faker',              '1.8.4'  
 end
 
 group :development do
