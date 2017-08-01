@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   get  '/signup',  to: 'users#new'
 
-  resources :users
-
+  resources :users do 
+    scope :module => 'users' do 
+      resources :tasks
+    end
+  end
 end

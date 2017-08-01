@@ -3,3 +3,9 @@
     %section.user_info
       %h1
         = @user.email 
+  .col-md-6
+    %ul.tasks
+      = will_paginate @tasks
+      = render @tasks
+      = will_paginate @tasks
+

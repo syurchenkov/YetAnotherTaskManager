@@ -1,0 +1,17 @@
+- @tasks.each do |task|
+  .task  
+    %span 
+      ID:
+      = task.id
+    %span
+      Name:
+      = task.name
+    %span
+      Description:
+      = task.description
+    %span
+      Created at:
+      = task.created_at
+    %span
+      State:
+      = task.state
