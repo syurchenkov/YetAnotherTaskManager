@@ -1,10 +1,6 @@
+- provide(:button_text, 'Create my account')
 %h1 
   Sign Up
 .row
   .col-md-6.col-md-offset-3
-    = simple_form_for(@user) do |f|
-      = render 'shared/error_messages'
-      = f.input :email
-      = f.input :password
-      = f.input :password_confirmation, label: 'Confirmation', required: true
-      = f.submit 'Create my account', :class => 'btn btn-primary'
+    = render 'form'

@@ -14,6 +14,9 @@ gem 'haml-rails',              '1.0.0'
 gem 'simple_form',             '3.5.0'
 gem 'bcrypt',                  '3.1.11'
 gem 'aasm'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
+
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
