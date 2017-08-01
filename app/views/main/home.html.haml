@@ -1,1 +1,43 @@
-= link_to 'Sign Up', signup_path
+- if logged_in? 
+  = will_paginate @tasks
+  %table.table
+    %thead
+      %tr
+        %th
+          Id
+        %th 
+          Created At
+        %th 
+          Name
+        %th
+          User
+    %tbody
+      - @tasks.each do |task|
+        %tr
+          %td
+            = task.id
+          %td
+            = task.created_at
+          %td
+            = task.name
+          %td
+            = task.user.email
+  = will_paginate @tasks
+- else 
+  .center.jumbotron
+    %h1 
+      Welcome to the YATM 
+    = link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary"
+    %h2 
+      or login with 
+    .row 
+      .col-md-4.col-md-offset-1
+        %span
+          login: admin@example.com
+        %span
+          password: password
+      .col-md-4.col-md-offset-2
+        %span
+          login: user@example.com
+        %span
+          password: password

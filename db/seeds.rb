@@ -11,7 +11,11 @@ User.create!(email: 'user@example.com',
 99.times do |n|
   email = "example-#{n+1}@example.org"
   password = "password"
-  User.create!(email: email,
+  user = User.create!(email: email,
                password:              password,
                password_confirmation: password)
+
+  (rand(5) + 1).times do |k|
+    FactoryGirl.create(:task, user: user)
+  end
 end
