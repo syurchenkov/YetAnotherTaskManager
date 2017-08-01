@@ -1,6 +1,7 @@
 class Users::TasksController < ApplicationController
   before_action :logged_in_user
-  before_action :correct_task_user
+  before_action :owner_user
+  before_action :correct_task_user, except: [:show]
   before_action :owner_user_task, only: [:show, :edit, :update, :destroy]
 
 
@@ -19,7 +20,7 @@ class Users::TasksController < ApplicationController
     @task = @owner_user.tasks.build(task_params)
     if(@task.save)
       flash[:success] = "New task \"#{ @task.name }\" for #{ @owner_user.email } created!"
-      redirect_to user_task_url(@owner_user, @task)
+      redirect_to @owner_user
     else
       render 'new'
     end
@@ -50,11 +51,15 @@ class Users::TasksController < ApplicationController
       params.require(:task).permit(:name, :description)
     end
 
-    def correct_task_user
-      @owner_user ||= User.find(params[:user_id]) 
+    def correct_task_user 
       unless current_user?(@owner_user) || current_user.admin?
-        redirect_to root_url
+        flash[:danger] = "You don't have any permissions"
+        redirect_to @owner_user
       end
+    end
+
+    def owner_user 
+      @owner_user ||= User.find(params[:user_id])
     end
 
     def owner_user_task
