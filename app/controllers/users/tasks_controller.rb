@@ -1,5 +1,13 @@
 class Users::TasksController < ApplicationController
   before_action :owner_user
+  before_action :owner_user_task, only: [:show, :edit, :update, :destroy]
+
+  def index 
+    @tasks = @owner_user.tasks
+  end
+
+  def show 
+  end
 
   def new
     @task = Task.new(user: @owner_user)
@@ -15,12 +23,23 @@ class Users::TasksController < ApplicationController
     end
   end
 
-  def show 
-    @task = @owner_user.tasks.find(params[:id])
+  def edit
   end
 
-  def index 
-    @tasks = @owner_user.tasks
+  def update
+    if @task.update_attributes(task_params)
+      flash[:success] = "Task updated"
+      redirect_to @owner_user
+    else
+      render 'edit'
+    end
+  end
+
+
+  def destroy 
+    @task.destroy
+    flash[:success] = "Task deleted"
+    redirect_to @owner_user
   end
 
   private
@@ -32,5 +51,9 @@ class Users::TasksController < ApplicationController
     # before 
     def owner_user 
       @owner_user ||= User.find(params[:user_id]) 
+    end
+
+    def owner_user_task
+      @task ||=  @owner_user.tasks.find(params[:id])
     end
 end

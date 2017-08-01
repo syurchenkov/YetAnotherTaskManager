@@ -9,3 +9,7 @@
     = task.state
   %span 
     = task.description
+  %span
+    = link_to 'edit', edit_user_task_path(task.user, task)
+  %span 
+    = link_to 'delete', user_task_url(task.user, task), method: :delete, data: { confirm: "You sure?" }
