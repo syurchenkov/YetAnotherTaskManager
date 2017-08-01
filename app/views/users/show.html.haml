@@ -1,13 +1,48 @@
-.row
-  %aside.col-md-4
-    %section.user_info
-      %h1
-        = @user.email 
-      %h2
-        = link_to 'New task', new_user_task_path(@user)
-  .col-md-6
-    %ul.tasks
-      = will_paginate @tasks
-      = render @tasks
-      = will_paginate @tasks
+%section.user_info
+  %h1
+    = @user.email 
+  %h2
+    = link_to 'New task', new_user_task_path(@user)
+      
+= will_paginate @tasks
+%table.table
+  %thead
+    %tr
+      %th
+        Id
+      %th 
+        Created At
+      %th 
+        Name
+      - if @user.admin?
+        %th 
+          User
+      %th
+        State
+      %th 
+        Description
+      %th
+      %th
+  %tbody
+    - @tasks.each do |task|
+      %tr
+        %td
+          = task.id
+        %td
+          = task.created_at
+        %td
+          = link_to task.name, user_task_path(task.user, task)
+        - if current_user.admin?
+          %td
+            = task.user.email
+        %td
+          = task.state
+        %td
+          = task.description
+        - if current_user.admin? || current_user?(@user)
+          %td
+            = link_to 'edit', edit_user_task_path(task.user, task)
+          %td
+            = link_to 'delete', user_task_path(task.user, task), method: :delete, data: { confirm: 'You sure?' }
+= will_paginate @tasks
 

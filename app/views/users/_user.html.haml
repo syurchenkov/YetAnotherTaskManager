@@ -1,5 +1,8 @@
 %li
   = link_to user.email, user
+  - if current_user.admin?
+    |
+    = link_to 'assign a task', new_user_task_path(user)
   - if current_user.admin? && !current_user?(user)
     |
     = link_to 'delete', user, method: :delete, data: { confirm: 'You sure?' }

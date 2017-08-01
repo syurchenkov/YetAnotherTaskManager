@@ -1,6 +1,8 @@
 class Users::TasksController < ApplicationController
-  before_action :owner_user
+  before_action :logged_in_user
+  before_action :correct_task_user
   before_action :owner_user_task, only: [:show, :edit, :update, :destroy]
+
 
   def index 
     @tasks = @owner_user.tasks
@@ -48,12 +50,15 @@ class Users::TasksController < ApplicationController
       params.require(:task).permit(:name, :description)
     end
 
-    # before 
-    def owner_user 
+    def correct_task_user
       @owner_user ||= User.find(params[:user_id]) 
+      unless current_user?(@owner_user) || current_user.admin?
+        redirect_to root_url
+      end
     end
 
     def owner_user_task
       @task ||=  @owner_user.tasks.find(params[:id])
     end
+
 end
