@@ -3,6 +3,8 @@
     %section.user_info
       %h1
         = @user.email 
+      %h2
+        = link_to 'New task', new_user_task_path(@user)
   .col-md-6
     %ul.tasks
       = will_paginate @tasks

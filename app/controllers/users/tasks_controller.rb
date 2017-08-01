@@ -16,7 +16,7 @@ class Users::TasksController < ApplicationController
   def create 
     @task = @owner_user.tasks.build(task_params)
     if(@task.save)
-      flash[:success] = "New task \"#{ @task.name }\" for user #{ @owner_user.email } created!"
+      flash[:success] = "New task \"#{ @task.name }\" for #{ @owner_user.email } created!"
       redirect_to user_task_url(@owner_user, @task)
     else
       render 'new'
