@@ -16,14 +16,14 @@ gem 'bcrypt',                  '3.1.11'
 gem 'aasm'
 gem 'will_paginate',           '3.1.5'
 gem 'bootstrap-will_paginate', '1.0.0'
+gem 'factory_girl_rails', '4.8.0'
+gem 'faker',              '1.8.4'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
   gem 'byebug',  '9.0.6', platform: :mri
   gem "erb2haml" 
-  gem 'rspec-rails', '~> 3.5'
-  gem 'factory_girl_rails', '4.8.0'
-  gem 'faker',              '1.8.4'  
+  gem 'rspec-rails', '~> 3.5'  
 end
 
 group :development do
