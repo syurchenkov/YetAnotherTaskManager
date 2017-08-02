@@ -50,6 +50,27 @@ RSpec.describe Users::TasksController, type: :controller do
         expect(task.reload.name).to eq(new_name)
       end
 
+      it 'PATCH :start' do 
+        patch 'start', params: {user_id: valid_user.id, id: task.id}
+        expect(task.reload.state).to eq('started')
+        expect(response).to redirect_to(user_task_path(valid_user, task))
+      end
+
+      it 'PATCH :finish' do 
+        task.start!
+        patch :finish, params: {user_id: valid_user.id, id: task.id}
+        expect(task.reload.state).to eq('finished')
+        expect(response).to redirect_to(user_task_path(valid_user, task))
+      end
+
+      it 'PATCH :rewind' do 
+        task.start!
+        task.finish!
+        patch :rewind, params: {user_id: valid_user.id, id: task.id}
+        expect(task.reload.state).to eq('new')
+        expect(response).to redirect_to(user_task_path(valid_user, task))
+      end
+
       it 'DELETE :destroy' do
         expect{
           delete :destroy, params: {

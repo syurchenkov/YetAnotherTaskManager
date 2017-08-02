@@ -1,15 +1,46 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the Users::TasksHelper. For example:
-#
-# describe Users::TasksHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
+
 RSpec.describe Users::TasksHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Task helpers" do 
+    let!(:user) { create(:user)}
+    let!(:new_task) { create(:task, user: user) }
+    let!(:started_task) { create(:task, user: user) }
+    let!(:finished_task) { create(:task, user: user) }
+    before(:example) do 
+      started_task.start!
+      finished_task.start!
+      finished_task.finish!
+    end
+
+    describe 'task_state_to_css_class' do
+
+      it 'danger when state is new' do 
+        expect(helper.task_state_to_css_class(new_task.state)).to eq('danger')
+      end
+
+      it 'warning when state is started' do 
+        expect(helper.task_state_to_css_class(started_task.state)).to eq('warning')
+      end
+
+      it 'success when state is finished' do 
+        expect(helper.task_state_to_css_class(finished_task.state)).to eq('success')
+      end
+
+    end
+
+    describe 'task_state_link' do 
+      it 'start when state is new' do 
+        expect(helper.task_state_link(new_task)).to include(user_task_start_path(new_task.user, new_task))
+      end
+
+      it 'finish when state is started' do 
+        expect(helper.task_state_link(started_task)).to include(user_task_finish_path(started_task.user, started_task))
+      end
+
+      it 'rewind when state is finished' do 
+        expect(helper.task_state_link(finished_task)).to include(user_task_rewind_path(finished_task.user, finished_task))
+      end
+    end
+  end
 end
