@@ -15,3 +15,9 @@
   %span
     State:
     = @task.state
+  %span
+    - if @task.file?
+      - if @task.file_is_image?
+        = image_tag @task.file.url 
+      - else
+        = link_to File.basename(@task.file.path), @task.file.url

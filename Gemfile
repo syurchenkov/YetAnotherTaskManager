@@ -18,6 +18,7 @@ gem 'will_paginate',           '3.1.5'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'factory_girl_rails', '4.8.0'
 gem 'faker',              '1.8.4'
+gem 'carrierwave',             '1.1.0'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

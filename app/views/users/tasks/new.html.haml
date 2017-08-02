@@ -6,4 +6,5 @@
     = simple_form_for(@task, url: user_tasks_path) do |f|
       = f.input  :name
       = f.input  :description, as: :text
+      = f.input  :file
       = f.button :submit, 'Create new task', class: "btn btn-primary"

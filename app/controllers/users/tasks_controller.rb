@@ -58,7 +58,7 @@ class Users::TasksController < ApplicationController
   private
 
     def task_params
-      params.require(:task).permit(:name, :description)
+      params.require(:task).permit(:name, :description, :file)
     end
 
     def correct_task_user 
