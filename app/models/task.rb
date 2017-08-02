@@ -17,5 +17,9 @@ class Task < ApplicationRecord
     event :finish do 
       transitions :from => :started, :to => :finished
     end
+
+    event :rewind do 
+      transitions :from => :finished, :to => :new
+    end
   end
 end

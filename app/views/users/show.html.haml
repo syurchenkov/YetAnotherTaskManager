@@ -1,9 +1,9 @@
 %section.user_info
   %h1
-    = @user.email 
-  %h2
-    = link_to 'New task', new_user_task_path(@user)
-      
+    = @user.email
+  - if correct_task_user?
+    %h2
+      = link_to 'New task', new_user_task_path(@user)      
 = will_paginate @tasks
 %table.table
   %thead
@@ -19,6 +19,9 @@
           User
       %th
         State
+      - if correct_task_user?
+        %th
+          Change State
       %th 
         Description
       %th
@@ -34,12 +37,16 @@
           = link_to task.name, user_task_path(task.user, task)
         - if current_user.admin?
           %td
-            = task.user.email
+            = link_to task.user.email, task.user
         %td
-          = task.state
+          %span{ class: "label label-#{task_state_to_css_class(task.state)}" }
+            = task.state
+        - if correct_task_user?
+          %td 
+            = task_state_link(task)
         %td
           = task.description
-        - if current_user.admin? || current_user?(@user)
+        - if correct_task_user?
           %td
             = link_to 'edit', edit_user_task_path(task.user, task)
           %td

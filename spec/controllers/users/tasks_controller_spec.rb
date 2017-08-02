@@ -11,11 +11,6 @@ RSpec.describe Users::TasksController, type: :controller do
       let!(:task) { create(:task, user: valid_user, name: 'OldName') }
       before(:each) { request.session[:user_id] = valid_user.id }
 
-      it 'GET :index' do 
-        get :index, params: {user_id: valid_user.id}
-        expect(response).to render_template('users/tasks/index')
-      end
-
       it 'GET :new' do 
         get :new, params: {user_id: valid_user.id}
         expect(response).to render_template('users/tasks/new')
