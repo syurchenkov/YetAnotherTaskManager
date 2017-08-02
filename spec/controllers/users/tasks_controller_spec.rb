@@ -1,113 +1,111 @@
 require 'rails_helper'
 
 RSpec.describe Users::TasksController, type: :controller do
-  describe 'login as regular user' do
-    let!(:valid_user) { create(:user) }
-    let!(:task) { create(:task, user: valid_user, name: 'OldName') }
-    before(:each) { request.session[:user_id] = valid_user.id }
+  describe 'User' do 
+    before(:each) do 
+      @regular_user = create(:user, :with_task)
+      @regular_user_task = @regular_user.tasks.first
+      @user = create(:user, :with_task)
+      @task = @user.tasks.first
+      @admin = create(:admin)
+    end
 
-    describe 'successfull requests' do 
-      let!(:valid_user) { create(:user) }
-      let!(:task) { create(:task, user: valid_user, name: 'OldName') }
-      before(:each) { request.session[:user_id] = valid_user.id }
+    context 'when not logged in' do 
 
-      it 'GET :new' do 
-        get :new, params: {user_id: valid_user.id}
-        expect(response).to render_template('users/tasks/new')
+      it 'redirect from task page' do 
+        get :show, params: { user_id: @user.id, id: @task.id }
+        expect(response).to redirect_to login_url
       end
 
-      it 'GET :show' do 
-        get :show, params: {user_id: valid_user.id, id: task.id}
-        expect(response).to render_template('users/tasks/show')
-      end
-
-      it 'GET :edit' do 
-        get :edit, params: {user_id: valid_user.id, id: task.id}
-        expect(response).to render_template('users/tasks/edit')
-      end
-
-      it 'POST :create' do 
+      it 'can not create task to another user' do 
         expect{
-          post :create, params: {
-            user_id: valid_user.id,
-            task: {
-              name: 'name',
-              description: 'description'
-            }
-          }
-        }.to change{ valid_user.tasks.count }.by(1)
-      end
-
-      it 'PATCH :update' do 
-        new_name = 'NewName'
-        patch :update, params: {
-          user_id: valid_user.id,
-          id: task.id,
-          task: {
-            name: new_name,
-          }
-        }
-        expect(task.reload.name).to eq(new_name)
-      end
-
-      it 'PATCH :start' do 
-        patch 'start', params: {user_id: valid_user.id, id: task.id}
-        expect(task.reload.state).to eq('started')
-        expect(response).to redirect_to(user_task_path(valid_user, task))
-      end
-
-      it 'PATCH :finish' do 
-        task.start!
-        patch :finish, params: {user_id: valid_user.id, id: task.id}
-        expect(task.reload.state).to eq('finished')
-        expect(response).to redirect_to(user_task_path(valid_user, task))
-      end
-
-      it 'PATCH :rewind' do 
-        task.start!
-        task.finish!
-        patch :rewind, params: {user_id: valid_user.id, id: task.id}
-        expect(task.reload.state).to eq('new')
-        expect(response).to redirect_to(user_task_path(valid_user, task))
-      end
-
-      it 'DELETE :destroy' do
-        expect{
-          delete :destroy, params: {
-            user_id: valid_user.id,
-            id: task.id
-          }
-        }.to change{
-          valid_user.tasks.count
-        }
+          post :create, params: { user_id: @user.id, task: {name: @task.name, description: @task.description} }
+        }.to_not change{ @user.tasks.count }
       end
     end
 
-    describe 'unsuccessfull requests' do
-      it 'POST :create' do 
-        expect{
-          post :create, params: {
-            user_id: valid_user.id,
-            task: {
-              name: '',
-              description: 'description'
-            }
-          }
-        }.to_not change{ valid_user.tasks.count }
-        expect(response).to render_template('users/tasks/new')
+    context 'when logged in as regular_user' do 
+      before(:each) { log_in_as(@regular_user) }
+
+      it 'can browse another user task' do 
+        get :show, params: {user_id: @user.id, id: @task.id } 
+        expect(response).to render_template 'users/tasks/show'
       end
 
-      it 'PATCH :update' do 
-        old_name = task.name
-        patch :update, params: {
-          user_id: valid_user.id,
-          id: task.id,
-          task: {
-            name: ' ',
-          }
-        }
-        expect(task.reload.name).to eq(old_name)
-        expect(response).to render_template('users/tasks/edit')
+      it 'can not create task to another user' do 
+        expect{
+          post :create, params: { user_id: @user.id, task: {name: @task.name, description: @task.description} }
+        }.to_not change{ @user.tasks.count }
+      end
+
+      it 'can browse own new task page' do 
+        get :new, params: {user_id: @regular_user}
+        expect(assigns(:task)).to be_a_new(Task)
+        expect(assigns(:task).user).to eq(@regular_user) 
+      end
+
+      it 'can create own task' do 
+        expect{
+          post :create, params: { user_id: @regular_user.id, task: {name: @task.name, description: @task.description} }
+        }.to change{ @regular_user.tasks.count }.by(1)
+      end
+
+      it 'can not create own task with invalid parametres' do 
+        expect{
+          post :create, params: { user_id: @regular_user.id, task: {name: '', description: ''} }
+        }.to_not change{ @regular_user.tasks.count }
+        expect(response).to render_template 'users/tasks/new'
+      end
+
+      it 'can update own task' do 
+        new_name = 'NEWNAME'
+        patch :update, params: { user_id: @regular_user.id, id: @regular_user_task.id, task: { name: new_name}}
+        expect(@regular_user_task.reload.name).to eq(new_name)
+      end
+
+      it 'can not update own task with invalid parametres' do 
+        new_name = ''
+        patch :update, params: { user_id: @regular_user.id, id: @regular_user_task.id, task: { name: new_name}}
+        expect(@regular_user_task.reload.name).to_not eq(new_name)
+      end
+
+      it 'can start own task' do 
+        patch :start, params: {user_id: @regular_user.id, id: @regular_user_task.id}
+        expect(@regular_user_task.reload.state).to eq('started')
+      end
+
+      it 'can finish own task' do
+        @regular_user_task.start!
+        patch :finish, params: {user_id: @regular_user.id, id: @regular_user_task.id}
+        expect(@regular_user_task.reload.state).to eq('finished')
+      end
+
+      it 'can rewind own task' do 
+        @regular_user_task.start!
+        @regular_user_task.finish!
+        patch :rewind, params: {user_id: @regular_user.id, id: @regular_user_task.id}
+        expect(@regular_user_task.reload.state).to eq('new')
+      end
+
+      it 'can destroy own task' do 
+        expect{
+          delete :destroy, params: {user_id: @regular_user.id, id: @regular_user_task.id}
+        }.to change {@regular_user.tasks.count}.by(-1)
+      end
+    end
+
+    context 'when logged in as admin' do 
+      before(:each) { log_in_as(@admin) }
+
+      it 'can browse another user task' do 
+        get :show, params: {user_id: @user.id, id: @task.id } 
+        expect(response).to render_template 'users/tasks/show'
+      end
+
+      it 'can create task to another user' do 
+        expect{
+          post :create, params: { user_id: @user.id, task: {name: @task.name, description: @task.description} }
+        }.to change{ @user.tasks.count }.by(1)
       end
     end
   end

@@ -15,5 +15,11 @@ FactoryGirl.define do
     factory :invalid_user do 
       email  'invalid_user.com'
     end
+
+    trait :with_task do 
+      after :create do |user|
+        create(:task, user: user) 
+      end
+    end
   end
 end

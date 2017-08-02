@@ -5,7 +5,7 @@ module Helpers
 
   # Log in as a particular user.
   def log_in_as(user)
-    session[:user_id] = user.id
+    request.session[:user_id] = user.id
   end
 
   def login_request_as(user)
