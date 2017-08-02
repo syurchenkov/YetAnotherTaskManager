@@ -1,4 +1,5 @@
 - if logged_in? 
+  %h1 All task
   = will_paginate @tasks
   %table.table
     %thead
@@ -19,9 +20,9 @@
           %td
             = task.created_at
           %td
-            = task.name
+            = link_to task.name, user_task_path(task.user, task)
           %td
-            = task.user.email
+            = link_to task.user.email, user_path(task.user)
   = will_paginate @tasks
 - else 
   .center.jumbotron

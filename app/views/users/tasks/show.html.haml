@@ -1,4 +1,5 @@
 %h1 Task
+= link_to 'Back', :back
 .task  
   %span 
     ID:
@@ -9,6 +10,10 @@
   %span
     Description:
     = @task.description
+  - if current_user.admin?
+    %span 
+      User: 
+      = link_to @task.user.email, user_path(@task.user)
   %span
     Created at:
     = @task.created_at

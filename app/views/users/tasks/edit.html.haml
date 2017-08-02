@@ -1,6 +1,7 @@
 %h1 
   Edit task for user
-  = @user.email 
+  = @user.email
+= link_to 'Back', :back
 .row
   .col-md-6.col-md-offset-3
     = simple_form_for(@task, url: user_task_path(@user, @task), method: 'patch') do |f|
