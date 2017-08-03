@@ -31,15 +31,15 @@ RSpec.describe Users::TasksHelper, type: :helper do
 
     describe 'task_state_link' do 
       it 'start when state is new' do 
-        expect(helper.task_state_link(new_task)).to include(user_task_start_path(new_task.user, new_task))
+        expect(helper.task_state_link(new_task)).to include(start_user_task_path(new_task.user, new_task))
       end
 
       it 'finish when state is started' do 
-        expect(helper.task_state_link(started_task)).to include(user_task_finish_path(started_task.user, started_task))
+        expect(helper.task_state_link(started_task)).to include(finish_user_task_path(started_task.user, started_task))
       end
 
       it 'rewind when state is finished' do 
-        expect(helper.task_state_link(finished_task)).to include(user_task_rewind_path(finished_task.user, finished_task))
+        expect(helper.task_state_link(finished_task)).to include(rewind_user_task_path(finished_task.user, finished_task))
       end
     end
   end

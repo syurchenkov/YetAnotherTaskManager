@@ -14,11 +14,11 @@ module Users::TasksHelper
   def task_state_link task
     case task.state 
     when 'new' 
-      link_to 'start', user_task_start_path(task.user, task), method: :patch, class: 'btn btn-default'
+      link_to 'start', start_user_task_path(task.user, task), method: :patch, class: 'btn btn-default'
     when 'started'
-      link_to 'finish', user_task_finish_path(task.user, task), method: :patch, class: 'btn btn-default'
+      link_to 'finish', finish_user_task_path(task.user, task), method: :patch, class: 'btn btn-default'
     else 
-      link_to 'rewind', user_task_rewind_path(task.user, task), method: :patch, class: 'btn btn-default' 
+      link_to 'rewind', rewind_user_task_path(task.user, task), method: :patch, class: 'btn btn-default' 
     end
   end
 end

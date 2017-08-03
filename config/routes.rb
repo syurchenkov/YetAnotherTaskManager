@@ -12,10 +12,13 @@ Rails.application.routes.draw do
 
   resources :users do 
     scope :module => 'users' do 
-      resources :tasks, except: :index
-      patch 'tasks/:id/rewind', to: 'tasks#rewind', as: :task_rewind
-      patch 'tasks/:id/start',  to: 'tasks#start',  as: :task_start
-      patch 'tasks/:id/finish', to: 'tasks#finish', as: :task_finish
+      resources :tasks, except: :index do
+        member do 
+          patch 'rewind', to: 'tasks#rewind'
+          patch 'start', to:  'tasks#start'
+          patch 'finish', to: 'tasks#finish'
+        end
+      end
     end
   end
 end
