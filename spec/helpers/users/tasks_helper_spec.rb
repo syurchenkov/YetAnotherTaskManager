@@ -29,18 +29,33 @@ RSpec.describe Users::TasksHelper, type: :helper do
 
     end
 
-    describe 'task_state_link' do 
-      it 'start when state is new' do 
-        expect(helper.task_state_link(new_task)).to include(start_user_task_path(new_task.user, new_task))
+    describe 'task_state_path' do 
+      it 'return start path for new task' do 
+        expect(helper.task_state_path(new_task)).to eq(start_user_task_path(new_task.user, new_task))
       end
 
-      it 'finish when state is started' do 
-        expect(helper.task_state_link(started_task)).to include(finish_user_task_path(started_task.user, started_task))
+      it 'return finish path for started task' do 
+        expect(helper.task_state_path(started_task)).to eq(finish_user_task_path(started_task.user, started_task))
       end
 
-      it 'rewind when state is finished' do 
-        expect(helper.task_state_link(finished_task)).to include(rewind_user_task_path(finished_task.user, finished_task))
+      it 'return rewind path for finished task' do 
+        expect(helper.task_state_path(finished_task)).to eq(rewind_user_task_path(finished_task.user, finished_task))
       end
+    end
+
+    describe 'task_state_action' do 
+      it 'start for new task' do 
+        expect(helper.task_state_action(new_task)).to eq('start')
+      end
+
+      it 'finish for started task' do 
+        expect(helper.task_state_action(started_task)).to eq('finish')
+      end
+
+      it 'rewind for finished task' do 
+        expect(helper.task_state_action(finished_task)).to eq('rewind')
+      end
+
     end
   end
 end

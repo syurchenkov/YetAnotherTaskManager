@@ -11,14 +11,25 @@ module Users::TasksHelper
     end
   end
 
-  def task_state_link task
+  def task_state_path task
     case task.state 
     when 'new' 
-      link_to 'start', start_user_task_path(task.user, task), method: :patch, class: 'btn btn-default'
+      start_user_task_path(task.user, task)
     when 'started'
-      link_to 'finish', finish_user_task_path(task.user, task), method: :patch, class: 'btn btn-default'
+      finish_user_task_path(task.user, task)
     else 
-      link_to 'rewind', rewind_user_task_path(task.user, task), method: :patch, class: 'btn btn-default' 
+      rewind_user_task_path(task.user, task)
+    end
+  end
+
+  def task_state_action task 
+    case task.state
+    when 'new'
+      'start'
+    when 'started' 
+      'finish'
+    else 
+      'rewind'
     end
   end
 end

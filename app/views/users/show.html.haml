@@ -43,7 +43,7 @@
             = task.state
         - if correct_task_user?
           %td 
-            = task_state_link(task)
+            = render(partial: 'tasks/state_form', locals: { task: task })
         %td
           = task.description
         - if correct_task_user?
