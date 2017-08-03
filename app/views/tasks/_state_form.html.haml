@@ -1,2 +1,2 @@
-= simple_form_for(task, url: task_state_path(task), method: :patch) do |p|
-  = p.button :submit, task_state_action(task), class: 'btn btn-default'
+= simple_form_for(task, url: task_state_path(task), method: :patch, remote: true) do |p|
+  = p.button :submit, task_state_action(task), data: { disable_with: "wait" }, autocomplete: 'off'

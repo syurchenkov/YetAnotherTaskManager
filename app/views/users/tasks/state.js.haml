@@ -1,0 +1,4 @@
+:plain
+  $("#task_state_#{@task.id}").text("#{@task.state}").removeClass().addClass("label label-#{task_state_to_css_class(@task.state)}");
+  $("#task_state_form_#{@task.id}").html("#{escape_javascript(render(partial: 'tasks/state_form', locals: { task: @task }))}");
+  

@@ -42,17 +42,26 @@ class Users::TasksController < ApplicationController
 
   def rewind
     @task.rewind!
-    redirect_back(fallback_location: user_task_path(@task.user, @task))
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: user_task_path(@task.user, @task)) }
+      format.js { render 'state' }
+    end
   end
 
   def start
     @task.start!
-    redirect_back(fallback_location: user_task_path(@task.user, @task))
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: user_task_path(@task.user, @task)) }
+      format.js { render 'state' }
+    end
   end
 
   def finish
     @task.finish!
-    redirect_back(fallback_location: user_task_path(@task.user, @task))
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: user_task_path(@task.user, @task)) }
+      format.js { render 'state' }
+    end
   end
 
   private

@@ -39,10 +39,10 @@
           %td
             = link_to task.user.email, task.user
         %td
-          %span{ class: "label label-#{task_state_to_css_class(task.state)}" }
+          %span{ id: "task_state_#{task.id}", class: "label label-#{task_state_to_css_class(task.state)}" }
             = task.state
         - if correct_task_user?
-          %td 
+          %td{ id: "task_state_form_#{task.id}" }
             = render(partial: 'tasks/state_form', locals: { task: task })
         %td
           = task.description
