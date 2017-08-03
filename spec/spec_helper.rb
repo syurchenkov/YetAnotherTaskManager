@@ -3,11 +3,25 @@ SimpleCov.start 'rails' do
   add_filter '/app/mailers/'
   add_filter '/app/channels'
   add_filter '/app/jobs/'
+  minimum_coverage 92
 end
 
 require 'helpers'
 
 RSpec.configure do |config|
+  config.after(:suite) do
+    example_group = RSpec.describe('Code coverage')
+    example = example_group.example("must be above #{ SimpleCov.minimum_coverage }"){
+      expect( SimpleCov.result.covered_percent ).to be > SimpleCov.minimum_coverage
+    }
+    example_group.run
+
+    passed = example.execution_result.status == :passed
+
+    RSpec.configuration.reporter.example_failed example unless passed
+  end
+  config.order = :random
+
   config.include Helpers
   # Returns true if a test user is logged in.
   # rspec-expectations config goes here. You can use an alternate
