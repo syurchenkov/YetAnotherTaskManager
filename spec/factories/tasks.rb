@@ -4,5 +4,9 @@ FactoryGirl.define do
     description { Faker::Lorem.paragraph(5)[0..500] }
     user nil
     state "new"
+
+    factory :task_with_random_state do 
+      state { %w( new started finished ).sample }
+    end
   end
 end

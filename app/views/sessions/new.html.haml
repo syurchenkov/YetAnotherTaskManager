@@ -2,7 +2,7 @@
 .row
   .col-md-6.col-md-offset-3
     = simple_form_for(:session, url: login_path) do |f|
-      = f.input  :email, placeholder: 'user@domain.com'
+      = f.input  :email, placeholder: 'user@example.com'
       = f.input  :password
       = f.button :submit, 'Log in', class: "btn btn-primary"
     %h3
